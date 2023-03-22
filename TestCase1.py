@@ -36,14 +36,16 @@ def SignUpSteps():
     SignUpButton = driver.find_element(By.CSS_SELECTOR, "button[data-qa='signup-button']") # find the Signup Button element
     SignUpButton.click() # click on signup button
 
-    driver.implicitly_wait(1) # need to wait for account exist element to load
+    SignUpURL = "https://www.automationexercise.com/signup"
 
-    AccountAlreadyExist = driver.find_element(By.CSS_SELECTOR, "p[style='color: red;']") # Find the "AccountAlreadyExist" text
-    if AccountAlreadyExist.text == "Email Address already exist!":
-        Login()
-        return
+    if SignUpURL == driver.current_url: # if the page hasn't changed
+        driver.implicitly_wait(0.5) # need to wait for account exist element to load
 
-    Login() # move to logging in if account already exists
+        AccountAlreadyExist = driver.find_element(By.CSS_SELECTOR, "p[style='color: red;']")  # Find the "AccountAlreadyExist" text
+
+        if AccountAlreadyExist.text == "Email Address already exist!":
+            Login()
+            return
 
     EnterAccountInfo = driver.find_element(By.CSS_SELECTOR, "h2[class='title text-center']") # Find the "EnterAccountInfo" text
     if EnterAccountInfo.text != "ENTER ACCOUNT INFORMATION":
@@ -63,11 +65,10 @@ def SignUpSteps():
     Year = Select(driver.find_element(By.CSS_SELECTOR, "select[data-qa='years']"))
     Year.select_by_value("2003") # website seems to store it as a str
 
-    driver.implicitly_wait(0.5) # need to wait for element to load
+    driver.implicitly_wait(5) # need to wait for element to load
     Newsletter = driver.find_element(By.CSS_SELECTOR, "input[id='newsletter']") # Enable Newsletter option
     Newsletter.click()
 
-    driver.implicitly_wait(0.5) # need to wait for element to load
     SpecialOffers = driver.find_element(By.CSS_SELECTOR, "input[id='optin']") # Find the Male option
     SpecialOffers.click()
 
@@ -100,12 +101,28 @@ def SignUpSteps():
 
     CreateAccount = driver.find_element(By.CSS_SELECTOR, "button[data-qa='create-account']")
     CreateAccount.click()
-
 def Login():
-    print("Login function")
+    LoginEmail = driver.find_element(By.CSS_SELECTOR, "input[data-qa='login-email']")  # find the LoginEmail element
+    LoginEmail.send_keys("njds7777@gmail.com")  # type in my name
+
+    LoginPassword = driver.find_element(By.CSS_SELECTOR, "input[data-qa='login-password']")  # find the LoginPassword element
+    LoginPassword.send_keys(password)  # type in my name
+
+    LoginButton = driver.find_element(By.CSS_SELECTOR, "button[data-qa='login-button']")  # Find the LoginButton element
+    LoginButton.click()
+
+    LoginName = driver.find_element(By.PARTIAL_LINK_TEXT, "Logged in as")  # Find the "Logged in as 'name'" element
+    if LoginName.text == "":
+        sys.exit(1) # login failed
+
+    # DeleteAccount()
+def DeleteAccount():
+    DeleteAccountButton = driver.find_element(By.PARTIAL_LINK_TEXT, "Delete Account")
+    DeleteAccountButton.click()
 
 if __name__ == "__main__":
     SignUpSteps()
-# just finished step 13
 driver.close()
 driver.quit()
+
+# TODO reorganise test cases
