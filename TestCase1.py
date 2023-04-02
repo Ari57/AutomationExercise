@@ -18,7 +18,6 @@ except WebDriverException: # will raise an exception if link is invalid (if page
     sys.exit(1) # exit if link is invalid
 
 def SignUp():
-
     RemoveGoogleAdvert()
 
     SignUpLogin = driver.find_element(By.LINK_TEXT, "Signup / Login") # find the Signup element
@@ -28,7 +27,6 @@ def SignUp():
     RemoveGoogleAdvert()
 
     assert driver.current_url == "https://www.automationexercise.com/login"
-
 
     NewUsers = driver.find_elements(By.TAG_NAME, "h2")
 
@@ -169,15 +167,13 @@ def DeleteAccount():
 
     # time.sleep(120)
 
-    RemoveGoogleAdvert()
+    # RemoveGoogleAdvert()
 
     assert driver.current_url == "https://www.automationexercise.com/delete_account"
     AccountDeleted = driver.find_element(By.CSS_SELECTOR, "h2[data-qa='account-deleted']")
     assert AccountDeleted.text == "ACCOUNT DELETED!"
 
 def RemoveGoogleAdvert():
-    print("Called")
-    driver.implicitly_wait(0.5)
     # every time the page changes, call this function
     try:
         driver.switch_to.frame('ad_iframe')
@@ -186,7 +182,6 @@ def RemoveGoogleAdvert():
     except (NoSuchElementException, NoSuchFrameException) as error:
         print("Remove Google Ad error")
         pass
-
 
 if __name__ == "__main__":
     SignUp()
