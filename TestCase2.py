@@ -1,5 +1,3 @@
-import sys
-from selenium.common.exceptions import WebDriverException
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
@@ -10,10 +8,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 driver.maximize_window()
 
-try:
-    driver.get("https://www.automationexercise.com/") # navigate to url
-except WebDriverException: # will raise an exception if link is invalid (if page exists)
-    sys.exit(1) # exit if link is invalid
+driver.get("https://www.automationexercise.com/") # navigate to url
+assert driver.current_url == "https://www.automationexercise.com/"
 
 def Login():
    # RemoveGoogleAdvert()
