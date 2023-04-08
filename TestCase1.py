@@ -131,7 +131,6 @@ def SignUp():
     LoginName = driver.find_element(By.PARTIAL_LINK_TEXT, "Logged in as")  # Find the "Logged in as 'name'" element
 
     assert "Logged in as" in LoginName.text # 16. Verify that "Logged in as username" is visible
-
 # below Login function is used to Log in, if account already exists
 
 def Login():
@@ -152,16 +151,14 @@ def Login():
 
     LoginName = driver.find_element(By.PARTIAL_LINK_TEXT, "Logged in as")  # Find the "Logged in as 'name'" element
 
-    assert LoginName.text != ""
+    assert "Logged in as" in LoginName.text
 
     DeleteConfirmation = input("Enter 'Y' to delete account: ")
     if DeleteConfirmation == "Y":
         DeleteAccount()
 
     return
-
 def DeleteAccount():
-
     driver.get("https://www.automationexercise.com/") # navigate back to home page
 
     DeleteAccountButton = driver.find_element(By.PARTIAL_LINK_TEXT, "Delete Account")
@@ -173,7 +170,6 @@ def DeleteAccount():
 
     AccountDeleteContinue = driver.find_element(By.CSS_SELECTOR, "a[data-qa='continue-button']")
     AccountDeleteContinue.click()  # 18. Click "Continue" button
-
 def RemoveGoogleAdvert():
     # every time the page changes, call this function
     try:
@@ -182,8 +178,6 @@ def RemoveGoogleAdvert():
         RemoveGoogleAd.click()
     except (NoSuchElementException, NoSuchFrameException):
         print("Remove Google Ad error")
-        pass
-
 if __name__ == "__main__":
     SignUp()
     # Login()
