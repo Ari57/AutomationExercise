@@ -3,6 +3,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from password import fakePassword
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.common.exceptions import NoSuchElementException, NoSuchFrameException
 
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install())) # 1. launch browser
 driver.maximize_window()
@@ -33,6 +34,14 @@ def LoginIncorrectDetails():
     LoginButton.click()  # 7. Click on login button
 
     driver.implicitly_wait(0.5)
+
+    try:
+        driver.switch_to.frame("aswift_4")  # might be buried under a parent
+        driver.switch_to.frame("ad_iframe")
+        RemoveGoogleAd = driver.find_element(By.CSS_SELECTOR, "div[id='dismiss-button']")  # remove the google ad that pops up
+        RemoveGoogleAd.click()
+    except (NoSuchElementException, NoSuchFrameException):
+        pass
 
     IncorrectDetails = driver.find_element(By.CSS_SELECTOR, "p[style='color: red;']")  # Find the "Incorrect details" text
 

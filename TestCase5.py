@@ -1,10 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
-
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.common.exceptions import NoSuchElementException, NoSuchFrameException
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install())) # 1. launch browser
-
 driver.maximize_window()
 
 driver.get("https://www.automationexercise.com/") # 2. navigate to url
@@ -15,6 +14,8 @@ def RegisterExistingEmail():
     SignUpLogin = driver.find_element(By.LINK_TEXT, "Signup / Login")  # find the Signup element
     SignUpLogin.click()  # 4. click on Signup button
     driver.implicitly_wait(0.5)
+
+    RemoveGoogleAdvert()
 
     NewUsers = driver.find_elements(By.TAG_NAME, "h2")
 
@@ -31,11 +32,20 @@ def RegisterExistingEmail():
     SignUpButton = driver.find_element(By.CSS_SELECTOR, "button[data-qa='signup-button']")
     SignUpButton.click()  # 7. Click Signup button
 
+    RemoveGoogleAdvert()
+
     driver.implicitly_wait(0.5)  # need to wait for account exist element to load
-
     AccountAlreadyExist = driver.find_element(By.CSS_SELECTOR, "p[style='color: red;']")
-
     assert AccountAlreadyExist.text == "Email Address already exist!"
+
+def RemoveGoogleAdvert():
+    try:
+        driver.switch_to.frame("aswift_4")  # might be buried under a parent
+        driver.switch_to.frame("ad_iframe")
+        RemoveGoogleAd = driver.find_element(By.CSS_SELECTOR, "div[id='dismiss-button']")  # remove the google ad that pops up
+        RemoveGoogleAd.click()
+    except (NoSuchElementException, NoSuchFrameException):
+        pass
 
 RegisterExistingEmail()
 

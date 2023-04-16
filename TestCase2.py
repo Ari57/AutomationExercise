@@ -2,8 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from password import password
-from TestCase1 import RemoveGoogleAdvert, DeleteAccount
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.common.exceptions import NoSuchElementException, NoSuchFrameException
 
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install())) # 1. Launch Browser
 
@@ -17,7 +17,7 @@ def LoginCorrectDetails():
     SignUpLogin.click()  # 4. click on Signup button
     driver.implicitly_wait(0.5)
 
-    # RemoveGoogleAdvert()
+    RemoveGoogleAdvert()
 
     H2Elements = driver.find_elements(By.TAG_NAME, "h2")
 
@@ -36,15 +36,36 @@ def LoginCorrectDetails():
     LoginButton = driver.find_element(By.CSS_SELECTOR, "button[data-qa='login-button']")  # Find the LoginButton element
     LoginButton.click() # 7. Click on login button
 
-    # RemoveGoogleAdvert()
+    RemoveGoogleAdvert()
 
     LoginName = driver.find_element(By.PARTIAL_LINK_TEXT, "Logged in as")  # Find the "Logged in as 'name'" element
 
     assert "Logged in as" in LoginName.text # 8. Verify that "logged in as username" is visible
 
     DeleteConfirmation = input("Enter 'Y' to delete account: ")
+
+    # 9. click delete account button/10. verify that "ACCOUNT DELETED!" is visible
+
     if DeleteConfirmation == "Y":
-        DeleteAccount() # 9. click delete account button/10. verify that "ACCOUNT DELETED!" is visible
+        driver.get("https://www.automationexercise.com/")
+
+        DeleteAccountButton = driver.find_element(By.PARTIAL_LINK_TEXT, "Delete Account")
+        DeleteAccountButton.click()
+
+        AccountDeleted = driver.find_element(By.CSS_SELECTOR, "h2[data-qa='account-deleted']")
+        assert AccountDeleted.text == "ACCOUNT DELETED!"
+
+        AccountDeleteContinue = driver.find_element(By.CSS_SELECTOR, "a[data-qa='continue-button']")
+        AccountDeleteContinue.click()
+
+def RemoveGoogleAdvert():
+    try:
+        driver.switch_to.frame("aswift_4")  # might be buried under a parent
+        driver.switch_to.frame("ad_iframe")
+        RemoveGoogleAd = driver.find_element(By.CSS_SELECTOR, "div[id='dismiss-button']")  # remove the google ad that pops up
+        RemoveGoogleAd.click()
+    except (NoSuchElementException, NoSuchFrameException):
+        pass
 
 if __name__ == "__main__":
     LoginCorrectDetails()

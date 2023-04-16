@@ -131,6 +131,7 @@ def SignUp():
     LoginName = driver.find_element(By.PARTIAL_LINK_TEXT, "Logged in as")  # Find the "Logged in as 'name'" element
 
     assert "Logged in as" in LoginName.text # 16. Verify that "Logged in as username" is visible
+
 # below Login function is used to Log in, if account already exists
 
 def Login():
@@ -170,17 +171,19 @@ def DeleteAccount():
 
     AccountDeleteContinue = driver.find_element(By.CSS_SELECTOR, "a[data-qa='continue-button']")
     AccountDeleteContinue.click()  # 18. Click "Continue" button
+
 def RemoveGoogleAdvert():
-    # every time the page changes, call this function
     try:
-        driver.switch_to.frame('ad_iframe')
+        driver.switch_to.frame("aswift_4")  # might be buried under a parent
+        driver.switch_to.frame("ad_iframe")
         RemoveGoogleAd = driver.find_element(By.CSS_SELECTOR, "div[id='dismiss-button']")  # remove the google ad that pops up
         RemoveGoogleAd.click()
     except (NoSuchElementException, NoSuchFrameException):
-        print("Remove Google Ad error")
+        pass
+
 if __name__ == "__main__":
     SignUp()
     # Login()
+    driver.close()
+    driver.quit()
 
-driver.close()
-driver.quit()

@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.common.exceptions import NoSuchElementException, NoSuchFrameException
 
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install())) # 1. launch browser
 driver.maximize_window()
@@ -13,20 +14,16 @@ def VerifyAllProducts():
     ProductsButton.click()  # 4. click on Products button
     driver.implicitly_wait(0.5)
 
-    if "google_vignette" in driver.current_url:
-        driver.get("https://www.automationexercise.com/products")
-
+    RemoveGoogleAdvert()
     assert driver.current_url == "https://www.automationexercise.com/products" # 5. user is navigated to products page
 
     ProductList = driver.find_element(By.CSS_SELECTOR, "div[class='features_items'") # 6. verify products list is visible
 
     driver.execute_script("window.scrollTo(0, 900)") # scroll down to find other elements
-
     ViewFirstProduct = driver.find_element(By.LINK_TEXT, "View Product")
     ViewFirstProduct.click() # 7. click on "view product" on first product
 
-    if "google_vignette" in driver.current_url: # TODO temp google advert fix
-        driver.get("https://www.automationexercise.com/product_details/1")
+    RemoveGoogleAdvert()
 
     assert driver.current_url == "https://www.automationexercise.com/product_details/1" # 8. user landed on product detail page
 
@@ -57,6 +54,15 @@ def VerifyAllProducts():
     print(ProductStock.text)
     print(ProductCondition.text)
     print(ProductBrand.text)
+
+def RemoveGoogleAdvert():
+    try:
+        driver.switch_to.frame("aswift_4")  # might be buried under a parent
+        driver.switch_to.frame("ad_iframe")
+        RemoveGoogleAd = driver.find_element(By.CSS_SELECTOR, "div[id='dismiss-button']")  # remove the google ad that pops up
+        RemoveGoogleAd.click()
+    except (NoSuchElementException, NoSuchFrameException):
+        pass
 
 VerifyAllProducts()
 

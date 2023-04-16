@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
-import time
+from selenium.common.exceptions import NoSuchElementException, NoSuchFrameException
 
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install())) # 1. launch browser
 driver.maximize_window()
@@ -12,6 +12,9 @@ assert driver.current_url == "https://www.automationexercise.com/" # 3. verify h
 def ContactUs():
     ContactUsButton = driver.find_element(By.LINK_TEXT, "Contact us")  # find the "Contact us" element
     ContactUsButton.click()  # 4. click on Contact us link
+
+    RemoveGoogleAdvert()
+
     driver.implicitly_wait(0.5)
 
     H2Elements = driver.find_elements(By.CSS_SELECTOR, "h2[class='title text-center']")
@@ -51,10 +54,18 @@ def ContactUs():
     HomeButton = driver.find_element(By.CSS_SELECTOR, "a[class='btn btn-success']")
     HomeButton.click()  # 11. Click Home button
 
-    if "google_vignette" in driver.current_url:
-        driver.get("https://www.automationexercise.com/") # temp fix for dealing with Google adverts
+    RemoveGoogleAdvert()
 
-    assert driver.current_url == "https://www.automationexercise.com/"  # 11. Verify that we have arrived on the home page
+    assert driver.current_url == "https://www.automationexercise.com/"  # 11. Verify that we have arrived at the home page
+
+def RemoveGoogleAdvert():
+    try:
+        driver.switch_to.frame("aswift_4")  # might be buried under a parent
+        driver.switch_to.frame("ad_iframe")
+        RemoveGoogleAd = driver.find_element(By.CSS_SELECTOR, "div[id='dismiss-button']")  # remove the google ad that pops up
+        RemoveGoogleAd.click()
+    except (NoSuchElementException, NoSuchFrameException):
+        pass
 
 ContactUs()
 
