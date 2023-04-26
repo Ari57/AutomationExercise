@@ -1,0 +1,43 @@
+Selenium Grid is a proxy server that is used to run tests remotely
+
+Components:
+• Hub - Central server for the grid, the point where tests are executed
+• The hub is launched on a single machine, and connects to one or more nodes that are registered to it
+• Only one hub in a grid instance
+
+• Node - Servers that are registered to the hub
+• Where tests are run
+• Don't need to be on the same platform (OS) as the hub
+• Many nodes in a grid instance
+
+Hub and Node Relationship:
+1. Test executed on the hub
+2. Hub searches through registered nodes
+3. If a matching node is found, the hub sends test scripts to that node
+
+Benefits:
+• Distributes tests across servers
+• Allows for testing on different browsers, platforms and devices
+• Allows tests to be run concurrently
+• Smart routing between hub and nodes
+• Manages multiple connections
+
+For better maintenance:
+• Enable warnings and logs for easy debugging
+• Create scripts to manage the grid
+
+For better performance:
+• Explicitly kill browser after tests
+• Restart nodes periodically
+• Restart server
+
+Pros:
+• Distributing tests on several machines
+• Can run tests in parallel
+• Runs tests against a large combination of browsers and operating systems
+• Finds specified nodes quickly and easily
+• Routes test scripts to the correct node
+
+Cons:
+• Maintainability is required to keep the hub and nodes running smoothly
+• Test running can start to degrade in performance over time

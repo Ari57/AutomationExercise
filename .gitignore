@@ -130,3 +130,6 @@ dmypy.json
 
 .idea/
 password.py
+DICodingTest/
+LearningSelenium/Section2 - Selenium Grid/RemoteServerIP.py
+*.jar

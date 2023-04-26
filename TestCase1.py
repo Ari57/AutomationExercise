@@ -4,14 +4,11 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from password import password
-
 from webdriver_manager.chrome import ChromeDriverManager
+
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install())) # 1. launch browser
-
 driver.maximize_window()
-
 driver.get("https://www.automationexercise.com/") # 2. navigate to url
-
 assert driver.current_url == "https://www.automationexercise.com/" # 3. verify home page
 
 def SignUp():
