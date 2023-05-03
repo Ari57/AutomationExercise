@@ -1,0 +1,15 @@
+Page object pattern:
+• Involves creating a class for each page in the app
+
+Each page has:
+• Test Selectors
+• Test Methods
+
+Goals:
+• Separation of test and code
+• More maintainable test code
+--------------------------------
+Test Suite Organisation:
+• Make sure each class focuses on one area of the application
+• Group tests into sub-suites based on features
+• Document tests with the use of a README
