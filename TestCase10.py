@@ -14,16 +14,15 @@ def VerifySubscription():
 
     FooterWidget = driver.find_element(By.CSS_SELECTOR, "div[class='single-widget'")
     SubscriptionText = FooterWidget.find_element(By.CSS_SELECTOR, "h2")
-
     assert SubscriptionText.text == "SUBSCRIPTION" # 5. Verify text 'SUBSCRIPTION'
 
     SubscriptionEmail = driver.find_element(By.CSS_SELECTOR, "input[id='susbscribe_email'")
     SubscriptionEmail.send_keys("njds7777@gmail.com") # 6. Enter email address in input and click arrow button
 
-    SubscriptionButton = driver.find_element(By.CSS_SELECTOR, "button[id='subscribe'") # 6. verify products list is visible
+    SubscriptionButton = driver.find_element(By.CSS_SELECTOR, "button[id='subscribe'")
     SubscriptionButton.click() # 6. Enter email address in input and click arrow button
 
-    SubscribeSuccess = driver.find_element(By.CSS_SELECTOR, "div[id='success-subscribe'") # 6. verify products list is visible
+    SubscribeSuccess = driver.find_element(By.CSS_SELECTOR, "div[id='success-subscribe'")
     assert SubscribeSuccess.text == "You have been successfully subscribed!"
 
 def RemoveGoogleAdvert():
